@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>逆轉金幣 對戰</title>
+<meta name="description" content="逆轉金幣線上對戰：3D／2D，雙人、對戰電腦、兩支手機連線。測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣">
+<style>
+:root { --ink:#13111b; --panel:#1f1c2b; --line:#3a3550; --text:#ece9f5; --dim:#a39fb8; --volt:#e4ff3a; --warn:#ff6b7d; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--ink); color: var(--text); font-family: "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 24px max(16px, env(safe-area-inset-right, 0px)); }
+main { width: min(100%, 620px); display: grid; gap: 18px; text-align: center; }
+h1 { margin: 0; font-size: clamp(44px, 12vw, 84px); color: var(--volt); letter-spacing: .04em; line-height: 1; }
+.sub { margin: 0; color: var(--dim); }
+.warn { margin: 0; color: var(--warn); font-weight: 900; }
+.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+a.card { display: grid; gap: 6px; padding: 22px 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line);
+  color: var(--text); text-decoration: none; }
+a.card:hover, a.card:focus-visible { border-color: var(--volt); outline: none; }
+a.card b { font-size: 28px; color: var(--volt); }
+a.card span { color: var(--dim); font-size: 14px; }
+.how { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; color: var(--dim); font-size: 14px; line-height: 1.7; }
+.how b { color: var(--text); }
+.dl { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; display: grid; gap: 10px; }
+.dl h2 { margin: 0; font-size: 18px; color: var(--volt); }
+.dl a { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 12px; border-radius: 10px;
+  background: #2a2638; border: 1px solid var(--line); color: var(--text); text-decoration: none; }
+.dl a:hover, .dl a:focus-visible { border-color: var(--volt); outline: none; }
+.dl a b { font-size: 16px; }
+.dl a em { font-style: normal; color: var(--dim); font-size: 13px; grid-column: 1; }
+.dl a i { font-style: normal; color: var(--volt); font-weight: 800; grid-row: 1 / span 2; grid-column: 2; }
+@media (max-width: 460px) { .pick { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>逆轉金幣</h1>
+  <p class="sub">對戰｜專家規則＋香港大賽規則・全 101 枚金幣</p>
+  <p class="warn">測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣</p>
+  <div class="pick">
+    <a class="card" href="3d/"><b>3D 版</b><span>立體球檯、可轉鏡頭</span></a>
+    <a class="card" href="2d/"><b>2D 版</b><span>俯視畫面、手機更順</span></a>
+  </div>
+  <div class="dl">
+    <h2>下載到電腦／手機（不用網路也能玩）</h2>
+    <a href="download/ReverseCoin3D_Windows.zip" download><b>3D 電腦版（Windows 一鍵安裝）</b><em>解壓縮後雙擊「安裝到電腦.bat」→ 桌面出現捷徑；免安裝 Python，約 1.8 MB</em><i>下載</i></a>
+    <a href="download/ReverseCoin2D_Python.zip" download><b>2D 電腦版（Python）</b><em>解壓縮後雙擊「執行遊戲.bat」，第一次會自動安裝需要的元件，約 7.7 MB</em><i>下載</i></a>
+    <a href="download/ReverseCoin3D_offline.html" download><b>3D 單一檔案版</b><em>一個 HTML 檔，用瀏覽器打開就能玩（電腦、平板皆可），約 3.2 MB</em><i>下載</i></a>
+    <a href="download/ReverseCoin_Android_Project.zip" download><b>Android 專案（給開發者）</b><em>用 Android Studio 開啟 → Build APK；一般玩家直接用上面的網頁版即可</em><i>下載</i></a>
+  </div>
+  <div class="how">
+    <b>最新更新（11/08）：</b>弱點範圍 +5%、場地摩擦 −3%（滑得更順）；←→／搖桿可 360° 連續轉；提示框擋到金幣會自動移開；出界小視窗不再殘留；每回合 30 秒；撞擊感（火花、衝擊波、震動、重擊頓格）；場地目前使用 A3。
+  </div>
+  <div class="how">
+    <b>兩支手機線上對戰：</b>進入遊戲 → 按「線上對戰」→ 一人按「建立房間」，把房號或「複製連結」傳給朋友 → 朋友輸入房號或點連結加入。<br><b>手機和電腦可以互相連線</b>，3D 和 2D 也能一起玩；直接連線不通時會自動改用中繼伺服器（約 7 秒）。請用 Safari／Chrome 開啟，不要在 LINE、IG 裡直接打開。
+  </div>
+</main>
+</body>
+</html>
