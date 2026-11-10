@@ -303,6 +303,109 @@ button { touch-action: manipulation; }
   #coinPeek img { width: 56px; height: 56px; }
   #tutBar { font-size: 13px; top: 52px; }
 }
+/* ===== 收藏／抽包（扭蛋機）／玩家檔案：FEATURES.collection 打開才會出現 ===== */
+.gOv { z-index: 30; display: block !important; padding: 0 !important; overflow: hidden; background: radial-gradient(120% 80% at 50% 30%, #2b2145 0%, #120f1d 70%); }
+.gOv[hidden] { display: none !important; }
+.gWrap { position: absolute; inset: 0; display: flex; flex-direction: column; padding: max(10px, env(safe-area-inset-top, 0px)) 16px max(26px, env(safe-area-inset-bottom, 0px)); gap: 8px; }
+.gHead { display: flex; align-items: center; gap: 10px; }
+.gHead h2 { flex: 1; margin: 0; font: 400 clamp(20px, 4.4vw, 30px) var(--display); color: var(--volt); text-align: center; }
+.gTix { font: 800 17px var(--body); background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.2); border-radius: 999px; padding: 5px 12px; white-space: nowrap; }
+.gTix b { color: var(--volt); font-variant-numeric: tabular-nums; }
+.gTabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.gTabs .btn { padding: 7px 4px; font-size: 14px; line-height: 1.2; }
+.gTabs .btn small { display: block; font-size: 11px; color: var(--dim); font-weight: 600; }
+.gTabs .btn[aria-pressed="true"] { border-color: var(--volt); color: var(--volt); background: rgba(228,255,58,.1); }
+.gStage { position: relative; flex: 1; min-height: 0; }
+#gCan { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+#gHint { position: absolute; left: 50%; top: 6px; transform: translateX(-50%); font: 800 16px var(--body); color: #fff; background: rgba(0,0,0,.5); padding: 5px 14px; border-radius: 999px; pointer-events: none; white-space: nowrap; }
+.gBtns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.gBtns .btn { padding: 12px 6px; font-size: 17px; }
+.gSub { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.gSub .btn { padding: 5px 10px; font-size: 13px; }
+.gWm { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font: 700 11px var(--body); color: #ff8b98; pointer-events: none; }
+/* 開出金幣 */
+#gRev { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: rgba(8,6,14,.82); overflow: hidden; }
+#gRev .rays { position: absolute; left: 50%; top: 42%; width: 190vmax; height: 190vmax; margin: -95vmax 0 0 -95vmax; border-radius: 50%;
+  background: repeating-conic-gradient(var(--rc) 0deg 7deg, transparent 7deg 22deg); opacity: .0; animation: gRay 14s linear infinite, gRayIn .5s .15s forwards;
+  -webkit-mask: radial-gradient(circle, #000 0%, transparent 62%); mask: radial-gradient(circle, #000 0%, transparent 62%); }
+#gRev.rv-RR .rays { background: repeating-conic-gradient(#ff5a5a 0deg 6deg, transparent 6deg 15deg, #ffd23a 15deg 21deg, transparent 21deg 30deg, #4ade80 30deg 36deg, transparent 36deg 45deg, #38bdf8 45deg 51deg, transparent 51deg 60deg, #a78bfa 60deg 66deg, transparent 66deg 75deg); }
+@keyframes gRay { to { transform: rotate(360deg); } }
+@keyframes gRayIn { to { opacity: var(--ro, .5); } }
+#gRev .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; animation: gFlash .55s ease-out; }
+@keyframes gFlash { 0% { opacity: .95; } 100% { opacity: 0; } }
+.gCoinWrap { position: relative; width: min(56vw, 300px); aspect-ratio: 1; perspective: 900px; margin-top: 10px; }
+.gCoin { position: absolute; inset: 0; transform-style: preserve-3d; animation: gSpin 1.6s cubic-bezier(.2,.75,.25,1) forwards; }
+.gCoin img { position: absolute; inset: 0; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; filter: drop-shadow(0 10px 22px rgba(0,0,0,.6)); }
+.gCoin img.back { transform: rotateY(180deg); }
+.gCoin.flipb { animation: none; transition: transform .7s cubic-bezier(.3,.8,.3,1); }
+@keyframes gSpin { 0% { transform: translateY(40%) scale(.15) rotateY(0); } 55% { transform: translateY(-6%) scale(1.08) rotateY(1260deg); } 100% { transform: translateY(0) scale(1) rotateY(1440deg); } }
+.gGlow { position: absolute; inset: -14%; border-radius: 50%; background: radial-gradient(circle, var(--rc) 0%, transparent 65%); opacity: .8; animation: gPulse 1.4s ease-in-out infinite alternate; }
+@keyframes gPulse { to { transform: scale(1.12); opacity: .45; } }
+.gCard { position: relative; text-align: center; opacity: 0; animation: gUp .45s 1.25s forwards; max-width: 520px; }
+@keyframes gUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.gRar { display: inline-block; font: 400 clamp(34px, 8vw, 52px)/1 var(--display); color: var(--rc); text-shadow: 0 0 18px var(--rc); letter-spacing: 2px; }
+#gRev.rv-RR .gRar { background: linear-gradient(90deg,#ff5a5a,#ffd23a,#4ade80,#38bdf8,#a78bfa,#ff5a5a); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gRb 2s linear infinite; text-shadow: none; }
+@keyframes gRb { to { background-position: 200% 0; } }
+.gName { font: 900 clamp(22px, 5vw, 30px) var(--body); margin-top: 4px; }
+.gMeta { font-size: 14px; color: var(--dim); margin-top: 2px; }
+.gVals { font: 800 17px var(--body); color: var(--volt); margin-top: 4px; }
+.gNew { display: inline-block; margin-left: 8px; font: 900 15px var(--body); color: #111; background: var(--volt); padding: 2px 9px; border-radius: 6px; vertical-align: middle; animation: gPulse .7s ease-in-out infinite alternate; }
+.gDup { display: inline-block; margin-left: 8px; font: 800 14px var(--body); color: var(--dim); border: 1px solid var(--dim); padding: 1px 8px; border-radius: 6px; vertical-align: middle; }
+.gRevBtns { position: relative; display: flex; gap: 8px; opacity: 0; animation: gUp .3s 1.5s forwards; }
+.gRevBtns .btn { min-width: 130px; padding: 11px 14px; font-size: 16px; }
+.gTapFlip { position: relative; font-size: 12px; color: var(--dim); opacity: 0; animation: gUp .3s 1.6s forwards; }
+/* 5 連總覽 */
+#gSum { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(8,6,14,.9); padding: 16px; }
+#gSum h3 { margin: 0; font: 400 26px var(--display); color: var(--volt); }
+.gGrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; width: min(100%, 620px); }
+.gGrid .it { background: rgba(255,255,255,.06); border: 2px solid var(--rc); border-radius: 12px; padding: 6px 4px; text-align: center; font-size: 12px; position: relative; opacity: 0; animation: gUp .3s forwards; }
+.gGrid .it img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.gGrid .it b { display: block; color: var(--rc); font: 400 15px var(--display); }
+.gGrid .it .n { position: absolute; top: -8px; right: -6px; font: 900 11px var(--body); background: var(--volt); color: #111; border-radius: 5px; padding: 1px 5px; }
+@media (max-width: 520px) { .gGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* 機率表 */
+#gRateBox { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: rgba(8,6,14,.85); padding: 16px; }
+#gRateBox .card { max-width: 560px; width: 100%; max-height: 86vh; overflow-y: auto; }
+#gRateBox table { width: 100%; border-collapse: collapse; font-size: 14px; }
+#gRateBox td, #gRateBox th { border-bottom: 1px solid rgba(255,255,255,.12); padding: 5px 6px; text-align: left; }
+#gRateBox td.p { text-align: right; font-variant-numeric: tabular-nums; color: var(--volt); font-weight: 800; }
+/* 玩家檔案／收藏 */
+.pTabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.pTabs .btn[aria-pressed="true"] { border-color: var(--volt); color: var(--volt); }
+.pBody { flex: 1; min-height: 0; overflow-y: auto; padding-bottom: 20px; }
+.pStat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 6px 0 10px; }
+.pStat div { background: rgba(255,255,255,.06); border-radius: 10px; padding: 8px 4px; text-align: center; font-size: 12px; color: var(--dim); }
+.pStat b { display: block; font: 400 24px var(--display); color: var(--volt); }
+.cGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; margin: 6px 0 14px; }
+.cIt { background: rgba(255,255,255,.05); border-radius: 10px; padding: 4px; text-align: center; font-size: 11px; position: relative; border: 0; color: var(--text); font-family: var(--body); }
+.cIt img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.cIt.no img { filter: grayscale(1) brightness(.25); }
+.cIt.no { color: var(--dim); }
+.cIt .q { position: absolute; top: 4px; right: 6px; font: 800 11px var(--body); color: var(--volt); }
+.cIt .rar { display: block; margin-top: 2px; }
+.pHist { width: 100%; border-collapse: collapse; font-size: 13px; }
+.pHist td { padding: 6px 4px; border-bottom: 1px solid rgba(255,255,255,.1); vertical-align: top; }
+.pHist .W { color: var(--ok); font-weight: 900; } .pHist .L { color: var(--bad); font-weight: 900; } .pHist .D { color: var(--warn); font-weight: 900; }
+.pBox { background: rgba(255,255,255,.05); border-radius: 12px; padding: 10px 12px; margin: 8px 0; font-size: 14px; line-height: 1.6; }
+.pBox textarea { width: 100%; min-height: 70px; background: #0d0b14; color: var(--text); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; font: 12px monospace; padding: 6px; box-sizing: border-box; }
+.pBox input { background: #0d0b14; color: var(--text); border: 1px solid rgba(255,255,255,.25); border-radius: 8px; font: 16px var(--body); padding: 6px 10px; width: 12em; }
+
+/* ===== 商城／會員 ===== */
+.shopGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.shopIt { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 12px 10px; text-align: center; display: flex; flex-direction: column; gap: 6px; position: relative; }
+.shopIt .ic { font-size: 34px; line-height: 1.1; }
+.shopIt b { font-size: 16px; }
+.shopIt .ds { font-size: 12px; color: var(--dim); min-height: 2.4em; }
+.shopIt .pr { font: 800 18px var(--body); color: var(--volt); }
+.shopIt .tag { position: absolute; top: -8px; right: -6px; background: #ff4f6d; color: #fff; font: 900 11px var(--body); padding: 2px 7px; border-radius: 6px; }
+.shopIt .btn { padding: 8px 6px; font-size: 15px; }
+.shopNote { font-size: 12px; color: var(--dim); background: rgba(255,255,255,.05); border-radius: 10px; padding: 8px 10px; margin: 6px 0 10px; line-height: 1.6; }
+#shopToast { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); background: var(--volt); color: #111; font: 900 16px var(--body); padding: 8px 16px; border-radius: 999px; z-index: 6; }
+.drawCount { font: 900 15px var(--body); color: #111; background: var(--volt); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+.authCard { max-width: 420px; width: 100%; margin: 0 auto; display: grid; gap: 10px; }
+.authCard input { background: #0d0b14; color: var(--text); border: 1px solid rgba(255,255,255,.25); border-radius: 10px; font: 17px var(--body); padding: 10px 12px; width: 100%; box-sizing: border-box; }
+#authMsg { min-height: 1.4em; font-size: 14px; }
+#overReward { font: 800 17px var(--body); color: var(--volt); margin: 6px 0 10px; }
 </style>
 
 <div id="wm" aria-hidden="true">測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣</div>
@@ -371,6 +474,8 @@ button { touch-action: manipulation; }
     <div class="menuPage" id="menuMain">
       <button class="btn big primary menuBig" id="mPlay">▶ 開始遊戲</button>
       <button class="btn big menuBig" id="mSet">⚙ 遊戲設定</button>
+      <div class="row2" id="mColRow" hidden><button class="btn big menuBig" id="mGacha" style="border-color:var(--volt);color:var(--volt)">🎰 抽包</button><button class="btn big menuBig" id="mShop">🛒 商城</button></div>
+      <div class="row2" id="mColRow2" hidden><button class="btn big menuBig" id="mProf">📒 收藏／戰績</button><button class="btn big menuBig" id="mAuth">👤 登入／註冊</button></div>
     </div>
     <div class="menuPage" id="menuPlay" hidden>
       <h3 class="menuH">開始遊戲｜選擇遊戲模式</h3>
@@ -436,6 +541,75 @@ button { touch-action: manipulation; }
     <input type="file" id="assetFiles" accept=".png,.jpg,.jpeg" multiple hidden>
     
   </div>
+</div>
+
+<div class="ov gOv" id="gachaOv" hidden>
+  <div class="gWrap">
+    <div class="gHead">
+      <button class="btn" id="gBack">← 返回</button>
+      <h2>扭蛋機</h2>
+      <span class="drawCount" id="gDraws">可抽 0 次</span><button class="btn" id="gShop" style="padding:6px 12px">🛒 商城</button><span class="gTix" hidden>🎫 抽包券 <b id="gTix">0</b></span>
+    </div>
+    <div class="gTabs" id="gTabs"></div>
+    <div class="gStage">
+      <canvas id="gCan" aria-label="扭蛋機：轉動把手抽金幣"></canvas>
+      <div id="gHint"></div>
+    </div>
+    <div class="gBtns">
+      <button class="btn big primary" id="g1">轉 1 次（🎫×1）</button>
+      <button class="btn big" id="g5">轉 5 次（🎫×5）</button>
+    </div>
+    <div class="gSub">
+      <button class="btn" id="gRates">機率一覽</button>
+      <button class="btn" id="gSkip" hidden>略過動畫</button>
+      <button class="btn" id="gTest" hidden style="border-color:#4ade80;color:#4ade80">測試用：抽包券 +10</button>
+    </div>
+  </div>
+  <div id="gRev" hidden></div>
+  <div id="gSum" hidden></div>
+  <div id="gRateBox" hidden></div>
+  <p class="gWm">測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣</p>
+</div>
+
+<div class="ov gOv" id="shopOv" hidden>
+  <div class="gWrap">
+    <div class="gHead">
+      <button class="btn" id="sBack">← 返回</button>
+      <h2>線上商城</h2>
+      <span class="drawCount" id="sDraws">可抽 0 次</span>
+    </div>
+    <div class="pBody" id="shopBody"></div>
+  </div>
+  <p class="gWm">測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣</p>
+</div>
+
+<div class="ov gOv" id="authOv" hidden>
+  <div class="gWrap">
+    <div class="gHead">
+      <button class="btn" id="aBack">← 返回</button>
+      <h2>會員</h2>
+      <span></span>
+    </div>
+    <div class="pBody" id="authBody"></div>
+  </div>
+  <p class="gWm">測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣</p>
+</div>
+
+<div class="ov gOv" id="profOv" hidden>
+  <div class="gWrap">
+    <div class="gHead">
+      <button class="btn" id="pBack">← 返回</button>
+      <h2>玩家檔案</h2>
+      <span class="gTix">🎫 <b id="pTix">0</b></span>
+    </div>
+    <div class="pTabs">
+      <button class="btn" data-pt="coll">收藏</button>
+      <button class="btn" data-pt="hist">戰績紀錄</button>
+      <button class="btn" data-pt="acct">帳號／存檔</button>
+    </div>
+    <div class="pBody" id="pBody"></div>
+  </div>
+  <p class="gWm">測試版推廣版本 請勿銷售利用｜改編萬代逆轉金幣</p>
 </div>
 
 <div class="ov" id="rulesOv" hidden>
@@ -561,6 +735,7 @@ button { touch-action: manipulation; }
   <div class="card" style="text-align:center">
     <h2 class="title" id="overTxt" style="font-size:52px"></h2>
     <p id="overSub" class="sub" style="font-size:17px;color:var(--text)" hidden></p>
+    <p id="overReward" hidden></p>
     <button class="btn big" id="btnReport" style="width:100%;border-color:var(--volt);color:var(--volt)">產生戰報圖（分享／下載）</button>
     <div class="row2">
       <button class="btn big primary" id="btnRematch">同隊再戰</button>
@@ -646,6 +821,7 @@ const PRESETS = [
   ["雙強 7000/7000/1000", ["v1o-bbr","v2-bbr-tra","v1o-c-hos"]],
   ["黑主平衡 7000/5000/3000", ["v1x-bbr","v3x-r-wan","v3x-c-jer"]],
 ];
+const FEATURES = {collection: true};   // 收藏／抽包／商城／會員：已正式開放   // 收藏／抽包（正式版測試）：內部測試版打包時改成 true
 const CAMP_ZH = {O:"秩序（白）", X:"極限（黑）"};
 // 規則模式：house＝isn_ver.1（攻擊方彈起翻色不淘汰、隊友出界放回）／official＝官方說明書 Ver.1.1.2（兩者皆為自滅 OUT）
 const RULES = {mode: "official"};
@@ -1409,8 +1585,8 @@ function drawCover(g, im, w, h) {
 function drawPlaceLayer(g, w, h, S) {
   const pxmm = w / (W * 10), r = 22.5 * pxmm, rc = 21.5 * pxmm;
   const dual = (fn, lw, dark, light) => { g.lineWidth = lw + 3 * S; g.strokeStyle = dark; fn(); g.stroke(); g.lineWidth = lw; g.strokeStyle = light; fn(); g.stroke(); };
-  const label = (t, x, y, col) => { g.font = `800 ${12*S}px 'Noto Sans TC', sans-serif`; g.textAlign = "center"; g.textBaseline = "middle";
-    const tw = g.measureText(t).width + 10 * S; g.fillStyle = "rgba(10,8,16,.72)"; g.beginPath(); g.roundRect ? g.roundRect(x - tw / 2, y - 9 * S, tw, 18 * S, 5 * S) : g.rect(x - tw / 2, y - 9 * S, tw, 18 * S); g.fill();
+  const label = (t, x, y, col) => { g.font = `800 ${15*S}px 'Noto Sans TC', sans-serif`; g.textAlign = "center"; g.textBaseline = "middle";
+    const tw = g.measureText(t).width + 10 * S; g.fillStyle = "rgba(10,8,16,.72)"; g.beginPath(); g.roundRect ? g.roundRect(x - tw / 2, y - 11 * S, tw, 22 * S, 6 * S) : g.rect(x - tw / 2, y - 11 * S, tw, 22 * S); g.fill();
     g.fillStyle = col; g.fillText(t, x, y + 0.5 * S); };
   for (const side of ["top", "bottom"]) {
     const y = START_Y[side] * h, light = side === "top" ? "#f4f2ea" : "#d7a6ff";
@@ -2875,6 +3051,8 @@ const UI = {
     $("overSub").hidden = !tr;
     if (tr) $("overSub").textContent = `全場時間到｜開場 M 值合計：${G.players[0].name} ${tr[0].toLocaleString()} vs ${G.players[1].name} ${tr[1].toLocaleString()} → ${tr[0] === tr[1] ? "相同，平手" : "合計較少的一方獲勝"}`;
     $("btnRematch").hidden = NET.on || G.spectate;
+    const rw = Prof.record(); $("overReward").hidden = !rw;
+    if (rw) $("overReward").textContent = (rw.tix ? `🎫 獲得抽包券 ×${rw.tix}` : rw.vs === "local" ? "同機雙人對戰不發抽包券" : "這場沒有抽包券（打贏電腦 +1、線上對戰都有）") + `｜目前 ${PROFILE.load().tickets} 張`;
     this.show("over");
   },
   assetStatus(msg) {
@@ -2887,7 +3065,7 @@ const UI = {
 
 // ------------------------------------------------------------------ 標題／猜拳／組隊
 function startMatch(vsCPU) {
-  G.players = [newPlayer("玩家 1"), newPlayer(vsCPU ? `電腦（${CPU.NAME[CPU.lv]}）` : "玩家 2", vsCPU)];
+  G.players = [newPlayer(FEATURES.collection ? PROFILE.load().name : "玩家 1"), newPlayer(vsCPU ? `電腦（${CPU.NAME[CPU.lv]}）` : "玩家 2", vsCPU)];
   goBuild(0);                                   // 官方：先決定隊伍，再決定陣營與先後攻
 }
 function startRPS() {
@@ -2915,6 +3093,7 @@ function goBuild(idx) {
   if (p.cpu) { p.team = PRESETS[0][1].slice(0, teamMax()); return idx === 0 ? goBuild(1) : startRPS(); }   // 電腦還不知道陣營 → 帶平衡隊
   Object.assign(BUILD, {idx, sel: p.team.slice(), side: "全部", rar: "全部", sort: "戰力"});
   BUILD.peek = null;
+  if (colOn(idx)) BUILD.sel = BUILD.sel.filter(id => PROFILE.has(id));
   $("buildTitle").textContent = teamMax() === 1 ? `${p.name} 組隊｜${RULES.mode === "easy" ? "簡易" : "標準"} 1V1：選 1 枚（陣營之後猜拳決定）` : `${p.name} 組隊｜一定要選 3 枚、不可重複，OX 合計 ≤ 15,000（雙值幣算 M 值；陣營之後猜拳決定）`;
   renderBuild(); UI.show("build");
 }
@@ -2928,11 +3107,12 @@ function renderBuild() {
   // 搜尋＋分數過濾（分數＝組隊計分，雙值幣為 M 值）
   const q = ($("q").value || "").trim().toLowerCase(), lo = +$("minS").value, hi = +$("maxS").value;
   const used = BUILD.sel.reduce((s, id) => s + BY_ID[id].cost, 0), left = BUDGET - used;
-  let lst = COINS.filter(c => (BUILD.side === "全部" || c.main === (BUILD.side === "白主" ? "O" : "X")) && (BUILD.rar === "全部" || c.rar === BUILD.rar)
+  const BASE = colOn(BUILD.idx) ? COINS.filter(c => PROFILE.has(c.id)) : COINS;
+  let lst = BASE.filter(c => (BUILD.side === "全部" || c.main === (BUILD.side === "白主" ? "O" : "X")) && (BUILD.rar === "全部" || c.rar === BUILD.rar)
     && c.cost >= lo && c.cost <= hi
     && (!BUILD.fit || BUILD.sel.includes(c.id) || c.cost <= left)
     && (!q || [c.jp, c.zh, c.set, c.rar, c.id, String(c.o), String(c.x)].some(t => String(t || "").toLowerCase().includes(q))));
-  $("hitCount").textContent = `${lst.length} / ${COINS.length} 枚`;
+  $("hitCount").textContent = `${lst.length} / ${BASE.length} 枚${BASE !== COINS ? "（已收藏）" : ""}`;
   $("fitOnly").setAttribute("aria-pressed", !!BUILD.fit);
   lst.sort(BUILD.sort === "戰力" ? (a, b) => top(b) - top(a) || a.cost - b.cost : (a, b) => a.cost - b.cost || top(b) - top(a));
   const L = $("coinList"), st = L.scrollTop; L.innerHTML = "";
@@ -2975,7 +3155,7 @@ function renderBuild() {
   $("btnConfirm").disabled = !(BUILD.sel.length === teamMax() && new Set(BUILD.sel).size === BUILD.sel.length && cost <= BUDGET);   // 官方：一定要 3 枚
   $("btnConfirm").textContent = BUILD.sel.length < teamMax() ? `確定隊伍（還差 ${teamMax() - BUILD.sel.length} 枚）` : "確定隊伍";
   const pr = $("presets"); pr.innerHTML = "";
-  for (const [name, ids] of PRESETS) { const b = document.createElement("button"); b.className = "btn"; b.textContent = "套用：" + name; b.onclick = () => { BUILD.sel = ids.slice(); renderBuild(); }; pr.appendChild(b); }
+  for (const [name, ids] of (colOn(BUILD.idx) ? STARTER : PRESETS)) { const b = document.createElement("button"); b.className = "btn"; b.textContent = "套用：" + name; b.onclick = () => { BUILD.sel = ids.slice(); renderBuild(); }; pr.appendChild(b); }
 }
 
 $("q").addEventListener("input", () => { $("coinList").scrollTop = 0; renderBuild(); });
@@ -3230,11 +3410,661 @@ GFX.buildPieces();
 }
 window.layoutDemo = layoutDemo;
 layoutDemo(); GFX.cam.tTheta = 0.5;
+// ======================================================================== 收藏／抽包（扭蛋機）／玩家檔案（正式版測試功能）
+// FEATURES.collection＝false 時完全不出現（目前公開的網站版維持原樣）；內部測試版打包時改成 true
+const STARTER = [                                   // 新玩家一開始只有這三組起始預組
+  ["起始預組｜最強套組（白）", ["seto-bbr", "seto-c-tra", "seto-c-igu"]],
+  ["起始預組｜最凶套組（黑）", ["setx-bbr", "setx-c-hyo", "setx-c-gao"]],
+  ["起始預組｜夏日套組（白）", ["fes-o-nya", "fes-o-kum", "fes-o-kab"]],
+];
+const REWARD = {welcome: 3, onlineWin: 3, onlineDraw: 2, onlineLose: 1, cpuWin: 1, cpuDraw: 0, cpuLose: 0};   // 抽包券：跟玩家對戰（線上）拿得多；同一台雙人對戰不給（避免自己刷）
+const GPOOLS = [
+  {n: "第1彈", sub: "白／黑", sets: [S1O, S1X], col: "#d8343f"},
+  {n: "第2彈", sub: "黑白雙面", sets: [S2], col: "#7c3aed"},
+  {n: "第3彈", sub: "白／黑", sets: [S3O, S3X], col: "#1d6fd8"},
+  {n: "第4彈", sub: "白／黑", sets: [S4O, S4X], col: "#0f9d6a"},
+];
+for (const p of GPOOLS) p.coins = COINS.filter(c => p.sets.includes(c.set));
+const G_BASE = {RR: 1, BBR: 3, BR: 6, R: 30, C: 60}, G_ORD = ["RR", "BBR", "BR", "R", "C"];
+const RCOL = {RR: "#ff4fd8", BBR: "#ffb21f", BR: "#b05cff", R: "#3b8cff", C: "#a7b4c6", BKR: "#e0a800"};
+// 卡池沒有某個稀有度時：機率往下一級移（第2彈、第4彈沒有 RR → 加到 BBR）；沒有 C → 加到 R
+function poolRates(p) {
+  const has = new Set(p.coins.map(c => c.rar)), r = {};
+  for (const k of G_ORD) if (has.has(k)) r[k] = 0;
+  G_ORD.forEach((k, i) => {
+    let j = i; while (j < G_ORD.length && !has.has(G_ORD[j])) j++;
+    if (j >= G_ORD.length) { j = i; while (j >= 0 && !has.has(G_ORD[j])) j--; }
+    r[G_ORD[j]] += G_BASE[k];
+  });
+  return r;
+}
+function gRand() { try { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] / 4294967296; } catch (e) { return Math.random(); } }
+function drawOne(p) {
+  const r = poolRates(p), tiers = G_ORD.filter(k => r[k]);
+  let x = gRand() * 100, tier = tiers[tiers.length - 1];
+  for (const k of tiers) { if ((x -= r[k]) < 0) { tier = k; break; } }
+  const list = p.coins.filter(c => c.rar === tier);
+  return list[Math.floor(gRand() * list.length)];
+}
+
+const PROFILE = {
+  KEY: "rcb-profile1", d: null,
+  get key() { return AUTH.user ? this.KEY + ":" + AUTH.user : this.KEY; },
+  fresh() {
+    const owned = {}; for (const [, ids] of STARTER) for (const id of ids) owned[id] = 1;
+    return {v: 1, uid: "P" + Date.now().toString(36).toUpperCase() + Math.floor(gRand() * 1e6).toString(36).toUpperCase(), name: "玩家",
+      created: Date.now(), tickets: REWARD.welcome, owned, hist: [], pulls: [], st: {ow: 0, ol: 0, od: 0, cw: 0, cl: 0, cd: 0, lw: 0, ll: 0, ld: 0, draws: 0}};
+  },
+  load() {
+    if (this.d) return this.d;
+    try { const o = JSON.parse(localStorage.getItem(this.key) || "null"); if (o && o.v === 1 && o.owned) return (this.d = o); } catch (e) {}
+    this.d = this.fresh(); this.save(); return this.d;
+  },
+  save() { try { localStorage.setItem(this.key, JSON.stringify(this.d)); } catch (e) {} updDraws(); },
+  has(id) { return (this.load().owned[id] || 0) > 0; },
+  add(id) { const d = this.load(); d.owned[id] = (d.owned[id] || 0) + 1; return d.owned[id]; },
+  count() { return Object.keys(this.load().owned).filter(k => this.d.owned[k] > 0 && BY_ID[k]).length; },
+  exportCode() { return btoa(unescape(encodeURIComponent(JSON.stringify(this.load())))); },
+  importCode(s) {
+    const o = JSON.parse(decodeURIComponent(escape(atob(String(s).replace(/\s+/g, "")))));
+    if (!o || o.v !== 1 || !o.owned || typeof o.tickets !== "number") throw new Error("bad");
+    this.d = o; this.save();
+  },
+  reset() { this.d = this.fresh(); this.save(); },
+};
+const colOn = idx => FEATURES.collection && G.players[idx] && !G.players[idx].cpu && !G.players[idx].remote;
+
+// ------------------------------------------------------------------ 合成音效（扭蛋機專用，不另外載檔）
+const GS = {
+  ac: null,
+  ctx() {
+    if (!SFX.on) return null;
+    try { if (!this.ac) this.ac = new (window.AudioContext || window.webkitAudioContext)(); if (this.ac.state === "suspended") this.ac.resume(); } catch (e) { return null; }
+    return this.ac;
+  },
+  tone(f, d, o = {}) {
+    const a = this.ctx(); if (!a) return;
+    const t = a.currentTime + (o.at || 0), os = a.createOscillator(), gn = a.createGain();
+    os.type = o.type || "triangle"; os.frequency.setValueAtTime(f, t); if (o.to) os.frequency.exponentialRampToValueAtTime(o.to, t + d);
+    gn.gain.setValueAtTime(0.0001, t); gn.gain.exponentialRampToValueAtTime(o.v || 0.15, t + 0.01); gn.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    os.connect(gn); gn.connect(a.destination); os.start(t); os.stop(t + d + 0.03);
+  },
+  noise(d, o = {}) {
+    const a = this.ctx(); if (!a) return;
+    const t = a.currentTime + (o.at || 0), n = Math.max(1, Math.floor(a.sampleRate * d)), b = a.createBuffer(1, n, a.sampleRate), ch = b.getChannelData(0);
+    for (let i = 0; i < n; i++) ch[i] = (Math.random() * 2 - 1) * (1 - i / n);
+    const s = a.createBufferSource(), f = a.createBiquadFilter(), gn = a.createGain();
+    s.buffer = b; f.type = "bandpass"; f.frequency.value = o.f || 2000; f.Q.value = o.q || 1.2; gn.gain.value = o.v || 0.2;
+    s.connect(f); f.connect(gn); gn.connect(a.destination); s.start(t);
+  },
+  tick() { this.noise(0.03, {f: 3400, v: 0.35}); this.tone(2100, 0.025, {type: "square", v: 0.03}); },
+  clunk() { this.noise(0.14, {f: 450, v: 0.6}); this.tone(150, 0.18, {type: "sine", v: 0.3, to: 60}); },
+  bump(k = 1) { this.noise(0.05, {f: 900, v: 0.25 * k}); this.tone(320, 0.06, {type: "sine", v: 0.12 * k, to: 200}); },
+  wobble(i) { this.tone(420 + i * 90, 0.07, {type: "sine", v: 0.12}); this.noise(0.04, {f: 1500, v: 0.15}); },
+  pop() { this.tone(380, 0.16, {type: "sine", to: 1500, v: 0.25}); this.noise(0.1, {f: 2600, v: 0.3}); },
+  up() { [660, 880, 1175, 1568].forEach((f, i) => this.tone(f, 0.12, {at: i * 0.05, type: "square", v: 0.06})); },
+  fan(rar) {
+    const s = {C: [523, 659], R: [523, 659, 784], BR: [523, 659, 784, 1047], BBR: [523, 659, 784, 1047, 1319], RR: [523, 659, 784, 1047, 1319, 1568, 2093]}[rar] || [523, 659];
+    s.forEach((f, i) => this.tone(f, 0.4, {at: i * 0.07, type: "triangle", v: 0.15}));
+    if (rar === "BBR" || rar === "RR") {
+      const e = s.length * 0.07;
+      [1047, 1319, 1568].forEach(f => this.tone(f, 1.1, {at: e, type: "triangle", v: 0.08}));
+      for (let i = 0; i < (rar === "RR" ? 10 : 5); i++) this.tone(2400 + gRand() * 1800, 0.12, {at: e + i * 0.06, type: "sine", v: 0.05});
+    }
+  },
+};
+
+// ------------------------------------------------------------------ 扭蛋機
+const Gacha = {
+  LW: 400, LH: 600, DOME: {x: 200, y: 182, R: 146}, HND: {x: 200, y: 448, r: 46}, CHUTE: {x: 150, y: 490, w: 100, h: 40}, FLOOR: 566,
+  pool: 0, st: "idle", caps: [], parts: [], outs: [], res: [], idx: 0, cur: null, hA: 0, hTurn: 0, hV: 0, stir: 0, drag: null,
+  raf: 0, last: 0, shake: 0, t: 0, flap: 0, tickA: 0, auto: false, n: 1, pend: [],
+
+  open() {
+    PROFILE.load(); $("gachaOv").hidden = false; $("gRev").hidden = $("gSum").hidden = $("gRateBox").hidden = true;
+    this.renderTabs(); this.caps = []; this.fill(22); this.outs = []; this.cur = null; this.setSt("idle"); this.updTix();
+    if (!this.raf) { this.last = performance.now(); const f = now => { this.raf = requestAnimationFrame(f); this.frame(now); }; this.raf = requestAnimationFrame(f); }
+  },
+  close() {
+    if (this.st !== "idle" && this.res.length) this.finishAll(true);       // 抽到一半離開：結果已經存進收藏
+    $("gachaOv").hidden = true; cancelAnimationFrame(this.raf); this.raf = 0;
+    if (!$("profOv").hidden) Prof.render();
+  },
+  updTix() { $("gTix").textContent = PROFILE.load().tickets; updDraws(); const t = this.st === "idle"; $("g1").disabled = !t; $("g5").disabled = !t; $("gSkip").hidden = t || this.st === "reveal"; },
+  renderTabs() {
+    const T = $("gTabs"); T.innerHTML = "";
+    GPOOLS.forEach((p, i) => {
+      const b = document.createElement("button"); b.className = "btn"; b.setAttribute("aria-pressed", i === this.pool);
+      const own = p.coins.filter(c => PROFILE.has(c.id)).length;
+      b.innerHTML = `${p.n}<small>${own}/${p.coins.length}</small>`;
+      b.onclick = () => { if (this.st !== "idle") return; this.pool = i; this.renderTabs(); this.caps = []; this.fill(22); };
+      T.appendChild(b);
+    });
+  },
+  hint(t) { $("gHint").textContent = t; $("gHint").hidden = !t; },
+  setSt(s) {
+    this.st = s; this.t = 0;
+    const p = GPOOLS[this.pool];
+    if (s === "idle") this.hint(`${p.n}｜${p.sub}`);
+    if (s === "ready") this.hint("轉動把手！（往右拖一圈，或點一下把手）");
+    if (s === "drop") this.hint("");
+    if (s === "present") this.hint(this.res.length > 1 ? `點一下打開膠囊！（${this.idx + 1}/${this.res.length}）` : "點一下打開膠囊！");
+    this.updTix();
+  },
+  capColor() { const x = gRand() * 100; return x < 3 ? "RR" : x < 12 ? "BBR" : x < 28 ? "BR" : x < 60 ? "R" : "C"; },
+  fill(n) {
+    const D = this.DOME;
+    while (this.caps.length < n) {
+      const a = gRand() * Math.PI * 2, d = gRand() * (D.R - 30);
+      this.caps.push({x: D.x + Math.cos(a) * d, y: D.y + Math.sin(a) * d * 0.6 + 20, vx: 0, vy: 0, r: 21, a: gRand() * 6.28, rar: this.capColor()});
+    }
+  },
+  // 按下「轉 N 次」：先扣券、決定結果、寫進收藏（中途關掉也不會不見）
+  start(n) {
+    if (this.st !== "idle") return;
+    const d = PROFILE.load();
+    if (d.tickets < n) { this.hint(`可抽次數不夠（需要 ${n} 次）—去商城或跟玩家對戰拿抽包券！`); this.shake = 0.25; GS.bump(); setTimeout(() => Shop.open(), 700); return; }
+    d.tickets -= n; d.st.draws = (d.st.draws || 0) + n;
+    const p = GPOOLS[this.pool];
+    this.res = [];
+    for (let i = 0; i < n; i++) {
+      const c = drawOne(p), before = d.owned[c.id] || 0, cnt = this.add(c.id);
+      const tease = (c.rar === "BBR" || c.rar === "RR") && gRand() < 0.5;      // 昇格演出：先看起來是普通色，開的時候變色
+      this.res.push({c, isNew: before === 0, cnt, shown: tease ? (c.rar === "RR" ? (gRand() < .5 ? "BBR" : "BR") : (gRand() < .5 ? "R" : "BR")) : c.rar, tease});
+      d.pulls.unshift({t: Date.now(), pool: p.n, id: c.id, rar: c.rar});
+    }
+    d.pulls.length = Math.min(d.pulls.length, 300);
+    PROFILE.save(); this.n = n; this.idx = 0; this.outs = []; this.hTurn = 0; this.auto = false;
+    this.renderTabs(); this.setSt("ready");
+  },
+  add(id) { return PROFILE.add(id); },
+  // 把手：拖曳轉一圈（只算順時針），或點一下自動轉
+  lp(e) { const cv = $("gCan"), b = cv.getBoundingClientRect(); return {x: (e.clientX - b.left - this.ox) / this.sc, y: (e.clientY - b.top - this.oy) / this.sc}; },
+  down(e) {
+    GS.ctx(); SFX.unlock && SFX.unlock();
+    const p = this.lp(e), H = this.HND;
+    if (this.st === "ready") {
+      if (Math.hypot(p.x - H.x, p.y - H.y) < H.r * 1.9) { this.drag = {a: Math.atan2(p.y - H.y, p.x - H.x), moved: 0, id: e.pointerId}; try { $("gCan").setPointerCapture(e.pointerId); } catch (er) {} }
+      else this.autoTurn();
+    } else if (this.st === "present") this.openCap();
+  },
+  move(e) {
+    if (!this.drag || this.st !== "ready") return;
+    const p = this.lp(e), H = this.HND, a = Math.atan2(p.y - H.y, p.x - H.x);
+    let da = a - this.drag.a; while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI;
+    this.drag.a = a; this.drag.moved += Math.abs(da);
+    if (da > 0) { this.turnBy(da); this.stir = Math.min(1.6, this.stir + da * 1.2); }
+  },
+  up() { if (!this.drag) return; const m = this.drag.moved; this.drag = null; if (this.st === "ready" && m < 0.25) this.autoTurn(); },
+  autoTurn() { if (this.st === "ready") { this.auto = true; this.hint(""); } },
+  turnBy(da) {
+    this.hA += da; this.hTurn += da; this.tickA += da;
+    while (this.tickA > Math.PI / 6) { this.tickA -= Math.PI / 6; GS.tick(); Haptic.buzz(6); }
+    if (this.hTurn >= Math.PI * 2 && this.st === "ready") { this.auto = false; GS.clunk(); Haptic.buzz(30); this.shake = 0.18; this.dispense(); }
+  },
+  dispense() {
+    this.setSt("drop"); this.pend = this.res.map((r, i) => ({r, at: 0.25 + i * 0.42}));
+    const n = this.res.length;
+    this.slots = n === 1 ? [200] : this.res.map((_, i) => 200 + (i - (n - 1) / 2) * 64);
+  },
+  emit(r, i) {
+    const D = this.DOME; let k = -1, by = -1e9;
+    this.caps.forEach((c, j) => { if (c.y > by) { by = c.y; k = j; } });
+    if (k >= 0) this.caps.splice(k, 1);
+    this.caps.push({x: D.x + (gRand() - .5) * 120, y: D.y - D.R + 30, vx: 0, vy: 0, r: 21, a: 0, rar: this.capColor()});   // 上面補一顆
+    this.outs.push({r, i, x: this.CHUTE.x + this.CHUTE.w / 2, y: this.CHUTE.y + 6, vx: 0, vy: 0, rad: 20, a: 0, ph: 0, t: 0, tx: this.slots[i], col: r.shown});
+    this.flap = 1; GS.bump(0.8);
+  },
+  present() {
+    const o = this.outs.find(q => q.i === this.idx); if (!o) return this.finishAll();
+    this.cur = {o, t: 0, x0: o.x, y0: o.y, r0: o.rad, k: 0, split: 0, rot: 0, ph: "move", promoted: false, col: o.col};
+    this.setSt("present"); this.st = "presenting";
+  },
+  openCap() {
+    if (!this.cur || this.st !== "present") return;
+    this.st = "open"; this.cur.ph = "wobble"; this.cur.t = 0; this.cur.wob = 0; this.hint("");
+  },
+  burst(x, y, rar, n) {
+    for (let i = 0; i < n; i++) {
+      const a = gRand() * Math.PI * 2, v = 120 + gRand() * 380;
+      const col = rar === "RR" ? `hsl(${Math.floor(gRand() * 360)},95%,65%)` : (gRand() < .35 ? "#fff" : RCOL[rar]);
+      this.parts.push({x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 80, life: 0.7 + gRand() * 0.6, t: 0, col, s: 2 + gRand() * 4});
+    }
+  },
+  reveal(r) {
+    this.st = "reveal"; this.updTix();
+    const c = r.c, mf = c.main === "O" ? "o" : "x", of = mf === "o" ? "x" : "o", last = this.idx >= this.res.length - 1, multi = this.res.length > 1;
+    const R = $("gRev"); R.className = "rv-" + c.rar; R.style.setProperty("--rc", RCOL[c.rar]); R.style.setProperty("--ro", {C: .22, R: .32, BR: .45, BBR: .58, RR: .7}[c.rar] || .4);
+    R.innerHTML = `<div class="rays"></div><div class="flash"></div>
+      <div class="gCoinWrap"><div class="gGlow"></div><div class="gCoin" id="gCoin"><img alt="${c.jp} ${mf === "o" ? "白" : "黑"}面" src="${faceURL(c.id, mf)}"><img class="back" alt="${c.jp} ${of === "o" ? "白" : "黑"}面" src="${faceURL(c.id, of)}"></div></div>
+      <div class="gCard"><div><span class="gRar">${c.rar}</span>${r.isNew ? `<span class="gNew">NEW!</span>` : `<span class="gDup">重複｜持有 ×${r.cnt}</span>`}</div>
+        <div class="gName">${c.jp}${c.zh ? `<span style="font-size:.62em;color:var(--dim);margin-left:8px">${c.zh}</span>` : ""}</div>
+        <div class="gMeta">${GPOOLS[this.pool].n}｜${c.set}</div>
+        <div class="gVals">${c.meta ? `白 ${c.o}／黑 ${c.x}（雙值）` : `OX ${c.o}`}｜組隊計 ${c.meta ? "M" : ""}${c.cost}</div></div>
+      <div class="gTapFlip">點金幣可以翻面看另一面</div>
+      <div class="gRevBtns">${multi && !last ? `<button class="btn big primary" id="gNext">下一個 ▶（${this.idx + 2}/${this.res.length}）</button>`
+        : multi ? `<button class="btn big primary" id="gNext">看總覽</button>`
+        : `<button class="btn big primary" id="gAgain">再抽 1 次</button><button class="btn big" id="gDone">完成</button>`}</div>`;
+    R.hidden = false;
+    let fl = 0; const coin = $("gCoin");
+    coin.onclick = () => { fl++; coin.classList.add("flipb"); coin.style.transform = `rotateY(${1440 + fl * 180}deg)`; SFX.play("flip", 0.6); };
+    setTimeout(() => SFX.play("flip", 0.8), 250);
+    GS.fan(c.rar); Haptic.buzz(c.rar === "RR" ? [60, 40, 90] : c.rar === "BBR" ? 60 : 25);
+    const nx = $("gNext"), ag = $("gAgain"), dn = $("gDone");
+    if (nx) nx.onclick = () => { R.hidden = true; this.outs = this.outs.filter(q => q.i !== this.idx); this.cur = null; this.idx++; if (this.idx < this.res.length) this.present(); else this.finishAll(); };
+    if (ag) ag.onclick = () => { R.hidden = true; this.toIdle(); this.start(1); };
+    if (dn) dn.onclick = () => { R.hidden = true; this.toIdle(); };
+  },
+  toIdle() { this.outs = []; this.cur = null; this.res = []; this.pend = []; this.drag = null; this.auto = false; this.setSt("idle"); this.renderTabs(); },
+  finishAll(silent) {
+    const res = this.res.slice(); $("gRev").hidden = true;
+    this.toIdle();
+    if (silent || !res.length) return;
+    if (res.length === 1) return;
+    const S = $("gSum"), best = res.reduce((b, r) => G_ORD.indexOf(r.c.rar) < G_ORD.indexOf(b.c.rar) ? r : b, res[0]);
+    S.innerHTML = `<h3>${res.length} 連抽結果</h3><p class="sub" style="margin:0">最高：<b style="color:${RCOL[best.c.rar]}">${best.c.rar} ${best.c.jp}</b>｜新金幣 ${res.filter(r => r.isNew).length} 枚</p>
+      <div class="gGrid">${res.map((r, i) => `<div class="it" style="--rc:${RCOL[r.c.rar]};animation-delay:${i * 0.08}s">${r.isNew ? `<span class="n">NEW</span>` : ""}<img alt="" src="${faceURL(r.c.id, r.c.main === "O" ? "o" : "x")}"><b>${r.c.rar}</b>${r.c.jp}</div>`).join("")}</div>
+      <div class="row2" style="width:min(100%,420px)"><button class="btn big primary" id="gSumAgain">再抽 5 次</button><button class="btn big" id="gSumDone">完成</button></div>`;
+    S.hidden = false;
+    $("gSumAgain").onclick = () => { S.hidden = true; this.start(5); };
+    $("gSumDone").onclick = () => { S.hidden = true; };
+  },
+  skip() {
+    if (this.st === "idle" || this.st === "reveal") return;
+    if (this.res.length === 1) { const r = this.res[0]; this.outs = []; this.cur = null; this.pend = []; this.idx = 0; this.reveal(r); return; }
+    this.finishAll();
+  },
+  rates() {
+    const B = $("gRateBox");
+    B.innerHTML = `<div class="card"><h3 class="menuH" style="margin-top:0">機率一覽（每轉一次＝1 枚金幣）</h3>
+      <p class="sub" style="margin:0 0 8px">基本機率：RR 1%｜BBR 3%｜BR 6%｜R 30%｜C 60%。卡池裡沒有的稀有度，機率移到下一級（第2彈、第4彈沒有 RR → 併入 BBR；第2彈沒有 C → 併入 R）。同稀有度內每枚機率相同。</p>
+      ${GPOOLS.map(p => { const r = poolRates(p); return `<p class="menuLbl" style="margin:10px 0 4px">${p.n}｜${p.sub}（${p.coins.length} 枚）</p><table><tr><th>稀有度</th><th>枚數</th><th>每枚</th><th style="text-align:right">合計</th></tr>${G_ORD.filter(k => r[k]).map(k => { const n = p.coins.filter(c => c.rar === k).length; return `<tr><td><span class="rar r-${k}" style="display:inline-block;padding:2px 8px">${k}</span></td><td>${n}</td><td>${(r[k] / n).toFixed(2)}%</td><td class="p">${r[k]}%</td></tr>`; }).join("")}</table>`; }).join("")}
+      <button class="btn big" id="gRateClose" style="width:100%;margin-top:12px">關閉</button></div>`;
+    B.hidden = false; $("gRateClose").onclick = () => { B.hidden = true; };
+  },
+
+  // ---------------------------------------------------------------- 每格更新＋畫面
+  frame(now) {
+    const dt = Math.max(0, Math.min(0.04, ((now - this.last) / 1000) || 0)); this.last = now; this.t += dt;
+    if (this.auto && this.st === "ready") { this.turnBy(dt * 7.5); this.stir = Math.min(1.6, this.stir + dt * 6); }
+    this.stir *= Math.pow(0.12, dt); this.shake = Math.max(0, this.shake - dt); this.flap = Math.max(0, this.flap - dt * 2.5);
+    for (let s = 0; s < 3; s++) this.phys(dt / 3);
+    if (this.st === "drop") {
+      for (const p of this.pend) if (!p.done && this.t >= p.at) { p.done = true; this.emit(p.r, this.res.indexOf(p.r)); }
+      if (this.pend.every(p => p.done) && this.outs.every(o => o.ph === 2) && this.t > this.pend[this.pend.length - 1].at + 0.6) this.present();
+    }
+    for (const o of this.outs) this.outStep(o, dt);
+    if (this.cur) this.curStep(dt);
+    for (const q of this.parts) { q.t += dt; q.vy += 520 * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.vx *= 0.985; }
+    this.parts = this.parts.filter(q => q.t < q.life);
+    this.draw();
+  },
+  phys(dt) {
+    const D = this.DOME, C = this.caps;
+    for (const c of C) {
+      c.vy += 1300 * dt;
+      if (this.stir > 0.02) {
+        const dx = c.x - D.x, dy = c.y - D.y, d = Math.hypot(dx, dy) || 1;
+        c.vx += (-dy / d) * this.stir * 420 * dt + (gRand() - .5) * this.stir * 1400 * dt;
+        c.vy += (dx / d) * this.stir * 420 * dt - (c.y > D.y + 40 ? gRand() * this.stir * 2600 * dt : 0);
+      }
+      c.x += c.vx * dt; c.y += c.vy * dt; c.a += c.vx / c.r * dt;
+    }
+    for (let i = 0; i < C.length; i++) for (let j = i + 1; j < C.length; j++) {
+      const a = C[i], b = C[j], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy), m = a.r + b.r;
+      if (d > 0 && d < m) {
+        const nx = dx / d, ny = dy / d, o = (m - d) / 2; a.x -= nx * o; a.y -= ny * o; b.x += nx * o; b.y += ny * o;
+        const vn = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+        if (vn < 0) { const j2 = -vn * 0.65; a.vx -= nx * j2; a.vy -= ny * j2; b.vx += nx * j2; b.vy += ny * j2; }
+      }
+    }
+    for (const c of C) {
+      const dx = c.x - D.x, dy = c.y - D.y, d = Math.hypot(dx, dy), lim = D.R - c.r - 4;
+      if (d > lim) {
+        const nx = dx / d, ny = dy / d; c.x = D.x + nx * lim; c.y = D.y + ny * lim;
+        const vn = c.vx * nx + c.vy * ny; if (vn > 0) { c.vx -= 1.35 * vn * nx; c.vy -= 1.35 * vn * ny; }
+        c.vx *= 0.985;
+      }
+    }
+  },
+  outStep(o, dt) {
+    if (this.cur && this.cur.o === o) return;
+    o.t += dt;
+    if (o.ph === 0) { o.y = this.CHUTE.y + 6 + Math.min(1, o.t / 0.2) * 30; if (o.t > 0.2) { o.ph = 1; o.vy = -150; o.vx = (o.tx - o.x) * 2.6; } }
+    else if (o.ph === 1) {
+      o.vy += 1500 * dt; o.x += o.vx * dt; o.y += o.vy * dt; o.vx *= 0.99; o.a += o.vx / o.rad * dt;
+      if (o.y > this.FLOOR) { o.y = this.FLOOR; if (Math.abs(o.vy) > 110) { o.vy *= -0.42; GS.bump(Math.min(1, Math.abs(o.vy) / 400)); } else { o.vy = 0; o.ph = 2; } }
+    } else { o.x += (o.tx - o.x) * Math.min(1, dt * 6); o.a *= 0.9; }
+  },
+  curStep(dt) {
+    const c = this.cur; c.t += dt;
+    if (c.ph === "move") {
+      const u = Math.min(1, c.t / 0.5), e = 1 - Math.pow(1 - u, 3);
+      c.k = e; c.x = c.x0 + (200 - c.x0) * e; c.y = c.y0 + (300 - c.y0) * e; c.r = c.r0 + (84 - c.r0) * e; c.rot = (1 - e) * c.o.a;
+      if (u >= 1) { c.ph = "wait"; this.st = "present"; this.setSt("present"); }
+    } else if (c.ph === "wait") { c.rot = Math.sin(c.t * 3) * 0.04; c.y = 300 + Math.sin(c.t * 2.4) * 4; }
+    else if (c.ph === "wobble") {
+      const T = 1.0, w = Math.min(1, c.t / T);
+      c.rot = Math.sin(c.t * 26) * 0.28 * w; c.y = 300; c.r = 84 + Math.sin(c.t * 26) * 2;
+      const step = Math.floor(c.t / 0.33); if (step !== c.wob && step < 3) { c.wob = step; GS.wobble(step); Haptic.buzz(10); }
+      if (c.o.r.tease && !c.promoted && c.t > 0.62) { c.promoted = true; c.col = c.o.r.c.rar; this.burst(200, 300, c.col, 26); GS.up(); this.hint("！？ 膠囊變色了！"); this.shake = 0.2; Haptic.buzz(40); }
+      if (c.t >= T + (c.o.r.tease ? 0.25 : 0)) { c.ph = "split"; c.t = 0; GS.pop(); this.burst(200, 300, c.o.r.c.rar, c.o.r.c.rar === "RR" ? 110 : c.o.r.c.rar === "BBR" ? 70 : 40); this.shake = c.o.r.c.rar === "RR" ? 0.45 : 0.2; this.hint(""); }
+    } else if (c.ph === "split") {
+      c.split = Math.min(1.6, c.t / 0.35); c.rot = 0;
+      if (c.t > 0.42) { const r = c.o.r; this.cur = null; this.reveal(r); }
+    }
+  },
+  draw() {
+    const cv = $("gCan"), dpr = Math.min(2, window.devicePixelRatio || 1), w = cv.clientWidth, h = cv.clientHeight;
+    if (!w || !h) return;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    const s = Math.min(w / this.LW, h / this.LH); this.sc = s; this.ox = (w - this.LW * s) / 2; this.oy = (h - this.LH * s) / 2;
+    const sh = this.shake > 0 ? this.shake * 30 : 0;
+    g.translate(this.ox + (gRand() - .5) * sh, this.oy + (gRand() - .5) * sh); g.scale(s, s);
+    this.drawMachine(g);
+    for (const o of this.outs) if (!this.cur || this.cur.o !== o) this.cap(g, o.x, o.y, o.rad, o.col, o.a, 0);
+    if (this.cur) {
+      g.fillStyle = `rgba(8,6,14,${0.62 * this.cur.k})`; g.fillRect(-400, -400, this.LW + 800, this.LH + 800);
+      const c = this.cur;
+      if (c.ph === "wobble" || c.ph === "split" || c.ph === "wait") {
+        const gl = g.createRadialGradient(200, 300, 10, 200, 300, 170); const col = c.col === "RR" ? `hsl(${(this.t * 200) % 360},95%,60%)` : RCOL[c.col];
+        gl.addColorStop(0, col); gl.addColorStop(1, "rgba(0,0,0,0)");
+        g.globalAlpha = c.ph === "split" ? 0.9 : c.ph === "wobble" ? 0.25 + 0.35 * Math.min(1, c.t) : 0.18; g.fillStyle = gl; g.fillRect(30, 130, 340, 340); g.globalAlpha = 1;
+      }
+      this.cap(g, c.x || 200, c.y || 300, c.r || 20, c.col, c.rot, c.split);
+      if (c.ph === "wait") { g.font = "800 18px " + getComputedStyle(document.body).fontFamily; g.fillStyle = "rgba(255,255,255," + (0.6 + 0.4 * Math.sin(this.t * 5)) + ")"; g.textAlign = "center"; g.fillText("TAP!", 200, 420); }
+    }
+    for (const q of this.parts) { g.globalAlpha = Math.max(0, 1 - q.t / q.life); g.fillStyle = q.col; g.beginPath(); g.arc(q.x, q.y, q.s, 0, 7); g.fill(); }
+    g.globalAlpha = 1;
+  },
+  rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); },
+  shade(hex, k) { const n = parseInt(hex.slice(1), 16); let r = n >> 16, gg = n >> 8 & 255, b = n & 255; const f = v => Math.max(0, Math.min(255, Math.round(k > 0 ? v + (255 - v) * k : v * (1 + k)))); return `rgb(${f(r)},${f(gg)},${f(b)})`; },
+  drawMachine(g) {
+    const P = GPOOLS[this.pool], col = P.col, D = this.DOME, H = this.HND, Cu = this.CHUTE, ff = getComputedStyle(document.body).fontFamily;
+    g.fillStyle = "rgba(0,0,0,.35)"; g.beginPath(); g.ellipse(200, 590, 165, 10, 0, 0, 7); g.fill();
+    // 機身
+    let gr = g.createLinearGradient(60, 0, 340, 0); gr.addColorStop(0, this.shade(col, -0.35)); gr.addColorStop(0.18, this.shade(col, 0.15)); gr.addColorStop(0.55, col); gr.addColorStop(1, this.shade(col, -0.45));
+    this.rr(g, 62, 322, 276, 222, 26); g.fillStyle = gr; g.fill(); g.lineWidth = 3; g.strokeStyle = this.shade(col, -0.55); g.stroke();
+    g.fillStyle = "rgba(255,255,255,.18)"; this.rr(g, 78, 334, 18, 196, 9); g.fill();
+    // 圓頂底座
+    gr = g.createLinearGradient(0, 308, 0, 336); gr.addColorStop(0, "#f2f2f6"); gr.addColorStop(1, "#8a8a98");
+    this.rr(g, 84, 306, 232, 28, 12); g.fillStyle = gr; g.fill();
+    // 玻璃圓頂＋膠囊
+    g.save(); g.beginPath(); g.arc(D.x, D.y, D.R, 0, 7); g.clip();
+    gr = g.createRadialGradient(D.x - 40, D.y - 50, 20, D.x, D.y, D.R); gr.addColorStop(0, "rgba(220,235,255,.18)"); gr.addColorStop(1, "rgba(120,150,210,.22)");
+    g.fillStyle = gr; g.fillRect(D.x - D.R, D.y - D.R, D.R * 2, D.R * 2);
+    for (const c of this.caps) this.cap(g, c.x, c.y, c.r, c.rar, c.a, 0);
+    g.restore();
+    g.lineWidth = 5; g.strokeStyle = "rgba(255,255,255,.55)"; g.beginPath(); g.arc(D.x, D.y, D.R, 0, 7); g.stroke();
+    g.lineWidth = 12; g.strokeStyle = "rgba(255,255,255,.28)"; g.lineCap = "round"; g.beginPath(); g.arc(D.x, D.y, D.R - 20, -2.75, -2.0); g.stroke();
+    g.fillStyle = "rgba(255,255,255,.35)"; g.beginPath(); g.ellipse(D.x + 70, D.y - 92, 10, 18, 0.6, 0, 7); g.fill(); g.lineCap = "butt";
+    gr = g.createLinearGradient(0, 22, 0, 44); gr.addColorStop(0, this.shade(col, 0.3)); gr.addColorStop(1, this.shade(col, -0.3));
+    this.rr(g, 168, 24, 64, 18, 9); g.fillStyle = gr; g.fill();
+    // 名牌
+    this.rr(g, 108, 346, 184, 52, 10); g.fillStyle = "#fff7e2"; g.fill(); g.lineWidth = 2; g.strokeStyle = this.shade(col, -0.4); g.stroke();
+    g.textAlign = "center"; g.fillStyle = this.shade(col, -0.25); g.font = `400 26px "Dela Gothic One", ${ff}`; g.fillText(P.n, 200, 376);
+    g.fillStyle = "#4a3f36"; g.font = `700 11px ${ff}`; g.fillText(P.sub, 200, 392);
+    // 投幣口
+    this.rr(g, 284, 418, 30, 60, 8); g.fillStyle = "#c9c9d4"; g.fill(); this.rr(g, 296, 426, 6, 44, 3); g.fillStyle = "#23202c"; g.fill();
+    // 把手
+    gr = g.createRadialGradient(H.x - 14, H.y - 16, 6, H.x, H.y, H.r); gr.addColorStop(0, "#ffffff"); gr.addColorStop(1, "#8c8c9a");
+    g.fillStyle = gr; g.beginPath(); g.arc(H.x, H.y, H.r, 0, 7); g.fill(); g.lineWidth = 3; g.strokeStyle = "#5d5b68"; g.stroke();
+    g.fillStyle = "#d8d8e2"; g.beginPath(); g.arc(H.x, H.y, H.r - 11, 0, 7); g.fill();
+    g.save(); g.translate(H.x, H.y); g.rotate(this.hA);
+    gr = g.createLinearGradient(0, -12, 0, 12); gr.addColorStop(0, this.shade(col, 0.35)); gr.addColorStop(1, this.shade(col, -0.35));
+    this.rr(g, -44, -12, 88, 24, 12); g.fillStyle = gr; g.fill(); g.lineWidth = 2; g.strokeStyle = this.shade(col, -0.6); g.stroke();
+    g.restore();
+    g.fillStyle = "#f4f4f8"; g.beginPath(); g.arc(H.x, H.y, 9, 0, 7); g.fill();
+    if (this.st === "ready" && !this.auto) {                // 提示：順時針箭頭
+      const k = 0.55 + 0.45 * Math.sin(this.t * 6), a0 = -2.4 + this.t * 2 % 6.283;
+      g.strokeStyle = `rgba(228,255,58,${k})`; g.lineWidth = 5; g.lineCap = "round"; g.beginPath(); g.arc(H.x, H.y, H.r + 12, a0, a0 + 2.2); g.stroke();
+      const ax = H.x + Math.cos(a0 + 2.2) * (H.r + 12), ay = H.y + Math.sin(a0 + 2.2) * (H.r + 12), ta = a0 + 2.2 + Math.PI / 2;
+      g.fillStyle = `rgba(228,255,58,${k})`; g.beginPath(); g.moveTo(ax + Math.cos(ta) * 12, ay + Math.sin(ta) * 12); g.lineTo(ax + Math.cos(ta + 2.3) * 10, ay + Math.sin(ta + 2.3) * 10); g.lineTo(ax + Math.cos(ta - 2.3) * 10, ay + Math.sin(ta - 2.3) * 10); g.fill(); g.lineCap = "butt";
+    }
+    // 出口
+    this.rr(g, Cu.x, Cu.y, Cu.w, Cu.h, 12); g.fillStyle = "#17121f"; g.fill(); g.lineWidth = 3; g.strokeStyle = this.shade(col, -0.6); g.stroke();
+    for (const o of this.outs) if (o.ph === 0) { g.save(); this.rr(g, Cu.x, Cu.y, Cu.w, Cu.h + 30, 12); g.clip(); this.cap(g, o.x, o.y, o.rad, o.col, 0, 0); g.restore(); }
+    g.fillStyle = "rgba(255,255,255,.25)"; this.rr(g, Cu.x + 4, Cu.y + 3, Cu.w - 8, 10 * (1 - this.flap) + 2, 5); g.fill();
+    // 托盤
+    gr = g.createLinearGradient(0, 548, 0, 590); gr.addColorStop(0, "rgba(255,255,255,.10)"); gr.addColorStop(1, "rgba(255,255,255,.02)");
+    this.rr(g, 40, 548, 320, 40, 14); g.fillStyle = gr; g.fill();
+  },
+  // 膠囊：上半有顏色、下半半透明白；split＞0 時上蓋飛開、裡面發光
+  cap(g, x, y, r, rar, rot, split) {
+    g.save(); g.translate(x, y); g.rotate(rot || 0);
+    const rainbow = rar === "RR", col = rainbow ? null : RCOL[rar] || "#aaa";
+    const topFill = () => { if (!rainbow) { const gr = g.createLinearGradient(0, -r, 0, 0); gr.addColorStop(0, this.shade(col, 0.35)); gr.addColorStop(1, this.shade(col, -0.15)); return gr; }
+      const gr = g.createLinearGradient(-r, -r, r, 0), o = (this.t * 0.6) % 1; ["#ff5a5a", "#ffd23a", "#4ade80", "#38bdf8", "#a78bfa", "#ff5a5a"].forEach((c, i) => gr.addColorStop(Math.min(1, Math.max(0, (i / 5 + o) % 1)), c)); return gr; };
+    if (split > 0) { const gl = g.createRadialGradient(0, 0, 2, 0, 0, r * 1.8); gl.addColorStop(0, "#ffffff"); gl.addColorStop(1, "rgba(255,255,255,0)"); g.globalAlpha = Math.min(1, split); g.fillStyle = gl; g.beginPath(); g.arc(0, 0, r * 1.8, 0, 7); g.fill(); g.globalAlpha = 1; }
+    g.save(); g.translate(-split * r * 0.15, split * r * 0.9); g.rotate(split * 0.35); g.globalAlpha = Math.max(0, 1 - split * 0.5);
+    g.beginPath(); g.arc(0, 0, r, 0, Math.PI); g.closePath();
+    const gb = g.createLinearGradient(0, 0, 0, r); gb.addColorStop(0, "rgba(255,255,255,.92)"); gb.addColorStop(1, "rgba(200,205,225,.85)"); g.fillStyle = gb; g.fill();
+    g.lineWidth = Math.max(1, r * 0.06); g.strokeStyle = "rgba(60,60,80,.45)"; g.stroke(); g.restore();
+    g.save(); g.translate(split * r * 0.4, -split * r * 1.5); g.rotate(-split * 0.8); g.globalAlpha = Math.max(0, 1 - split * 0.5);
+    g.beginPath(); g.arc(0, 0, r, Math.PI, Math.PI * 2); g.closePath(); g.fillStyle = topFill(); g.fill();
+    g.lineWidth = Math.max(1, r * 0.06); g.strokeStyle = "rgba(40,30,60,.5)"; g.stroke();
+    g.fillStyle = "rgba(255,255,255,.55)"; g.beginPath(); g.ellipse(-r * 0.38, -r * 0.55, r * 0.22, r * 0.12, -0.6, 0, 7); g.fill();
+    g.fillStyle = "rgba(0,0,0,.18)"; g.fillRect(-r, -r * 0.08, r * 2, r * 0.1);
+    g.restore(); g.restore();
+  },
+};
+$("gCan").addEventListener("pointerdown", e => { e.preventDefault(); Gacha.down(e); });
+$("gCan").addEventListener("pointermove", e => Gacha.move(e));
+$("gCan").addEventListener("pointerup", e => Gacha.up(e));
+$("gCan").addEventListener("pointercancel", () => { Gacha.drag = null; });
+$("g1").onclick = () => Gacha.start(1);
+$("g5").onclick = () => Gacha.start(5);
+$("gRates").onclick = () => Gacha.rates();
+$("gSkip").onclick = () => Gacha.skip();
+$("gBack").onclick = () => Gacha.close();
+$("gTest").onclick = () => { const d = PROFILE.load(); d.tickets += 10; PROFILE.save(); Gacha.updTix(); GS.up(); };
+
+// ------------------------------------------------------------------ 玩家檔案：收藏／戰績／帳號
+const Prof = {
+  tab: "coll", resetArm: 0,
+  open(tab) { PROFILE.load(); if (tab) this.tab = tab; $("profOv").hidden = false; this.render(); },
+  close() { $("profOv").hidden = true; },
+  // 一場結束：記錄戰績、發抽包券（教學、觀戰不算；同一場只算一次）
+  record() {
+    if (!FEATURES.collection || G.tut || G.spectate || !G.players.length || G.winner == null) return null;
+    const key = G.stats && G.stats.t0; if (!key) return null;
+    if (this._key === key) return this._res;
+    const d = PROFILE.load(), me = NET.on ? NET.seat : 0, vs = NET.on ? "online" : G.players[1 - me].cpu ? "cpu" : "local";
+    const res = G.winner === -1 ? "D" : G.winner === me ? "W" : "L", RW = {W: "Win", L: "Lose", D: "Draw"}[res];
+    const tix = vs === "online" ? REWARD["online" + RW] : vs === "cpu" ? REWARD["cpu" + RW] : 0;
+    d.tickets += tix; const sk = {online: "o", cpu: "c", local: "l"}[vs] + res.toLowerCase(); d.st[sk] = (d.st[sk] || 0) + 1;
+    const ko = G.stats.ko || [0, 0];
+    d.hist.unshift({t: Date.now(), vs, lv: vs === "cpu" ? CPU.NAME[CPU.lv] : null, rule: RULES.mode, res, me: (G.players[me].team || []).slice(), op: (G.players[1 - me].team || []).slice(),
+      opn: G.players[1 - me].name.replace("（你）", ""), turns: G.turnNo, dur: Math.round((Date.now() - key) / 1000), ko: [ko[me] || 0, ko[1 - me] || 0], tix, time: !!G.timeResult});
+    d.hist.length = Math.min(d.hist.length, 200);
+    PROFILE.save();
+    this._key = key; this._res = {res, tix, vs}; return this._res;
+  },
+  render() {
+    const d = PROFILE.load(), B = $("pBody");
+    $("pTix").textContent = d.tickets;
+    for (const b of document.querySelectorAll("[data-pt]")) b.setAttribute("aria-pressed", b.dataset.pt === this.tab);
+    if (this.tab === "coll") {
+      const inPool = new Set(GPOOLS.flatMap(p => p.coins.map(c => c.id))), other = COINS.filter(c => !inPool.has(c.id));
+      const grid = lst => `<div class="cGrid">${lst.slice().sort((a, b) => G_ORD.indexOf(a.rar) - G_ORD.indexOf(b.rar)).map(c => { const n = d.owned[c.id] || 0;
+        return `<div class="cIt ${n ? "" : "no"}" title="${c.jp} ${c.zh}">${n > 1 ? `<span class="q">×${n}</span>` : ""}<img alt="${n ? c.jp : "未取得"}" loading="lazy" src="${faceURL(c.id, c.main === "O" ? "o" : "x")}"><span class="rar r-${c.rar}">${c.rar}</span>${n ? c.jp : "？？？"}</div>`; }).join("")}</div>`;
+      B.innerHTML = `<div class="pBox">收藏 <b style="color:var(--volt);font-size:20px">${PROFILE.count()}</b> / ${COINS.length} 枚｜抽過 ${d.st.draws || 0} 次｜組隊時只能選已取得的金幣。<button class="btn" id="pGoGacha" style="margin-left:8px;padding:4px 12px">🎰 去抽包</button></div>`
+        + GPOOLS.map(p => `<p class="menuLbl" style="margin:12px 0 2px">${p.n}｜${p.sub}（${p.coins.filter(c => d.owned[c.id]).length}/${p.coins.length}）</p>${grid(p.coins)}`).join("")
+        + `<p class="menuLbl" style="margin:12px 0 2px">起始預組・活動・特典（${other.filter(c => d.owned[c.id]).length}/${other.length}，抽包抽不到，之後可做活動／成就取得）</p>${grid(other)}`;
+      $("pGoGacha").onclick = () => { Gacha.open(); };
+    } else if (this.tab === "hist") {
+      const s = d.st, w = (s.ow || 0) + (s.cw || 0) + (s.lw || 0), l = (s.ol || 0) + (s.cl || 0) + (s.ll || 0), dr = (s.od || 0) + (s.cd || 0) + (s.ld || 0), tot = w + l + dr;
+      const vsTxt = h => h.vs === "online" ? `線上 vs ${h.opn}` : h.vs === "cpu" ? `電腦（${h.lv}）` : `同機雙人 vs ${h.opn}`;
+      const ruleTxt = {official: "專業 3V3", standard: "標準 1V1", easy: "簡易 1V1", house: "isn_ver.1"};
+      B.innerHTML = `<div class="pStat"><div><b>${tot}</b>總場數</div><div><b>${w}</b>勝</div><div><b>${l}</b>敗</div><div><b>${tot ? Math.round(w / tot * 100) : 0}%</b>勝率</div></div>
+        <div class="pBox">線上：${s.ow || 0} 勝 ${s.ol || 0} 敗 ${s.od || 0} 和｜電腦：${s.cw || 0} 勝 ${s.cl || 0} 敗 ${s.cd || 0} 和｜同機雙人：${(s.lw || 0) + (s.ll || 0) + (s.ld || 0)} 場<br>
+        抽包券獎勵：線上勝 +${REWARD.onlineWin}、和 +${REWARD.onlineDraw}、敗 +${REWARD.onlineLose}；電腦勝 +${REWARD.cpuWin}；同機雙人不給。</div>
+        ${d.hist.length ? `<table class="pHist">${d.hist.slice(0, 60).map(h => { const dt = new Date(h.t);
+          return `<tr><td style="white-space:nowrap;color:var(--dim)">${dt.getMonth() + 1}/${dt.getDate()} ${String(dt.getHours()).padStart(2, "0")}:${String(dt.getMinutes()).padStart(2, "0")}</td>
+          <td class="${h.res}">${{W: "勝", L: "敗", D: "和"}[h.res]}</td><td>${vsTxt(h)}<br><span style="color:var(--dim);font-size:12px">${ruleTxt[h.rule] || h.rule}｜${h.turns} 手｜${Math.floor(h.dur / 60)}分${h.dur % 60}秒｜擊倒 ${h.ko[0]}:${h.ko[1]}${h.time ? "｜時間到" : ""}</span><br>
+          <span style="font-size:12px">我方：${h.me.map(id => BY_ID[id] ? BY_ID[id].jp : id).join("、")}</span></td><td style="color:var(--volt);white-space:nowrap">${h.tix ? "🎫+" + h.tix : ""}</td></tr>`; }).join("")}</table>`
+          : `<p class="sub">還沒有對戰紀錄。打完一場就會出現在這裡。</p>`}`;
+    } else {
+      B.innerHTML = `<div class="pBox">玩家名稱：<input id="pName" maxlength="12" value="${d.name.replace(/"/g, "&quot;")}"> <button class="btn" id="pNameOk" style="padding:5px 12px">儲存</button><br>
+        玩家 ID：<b>${d.uid}</b>｜建立：${new Date(d.created).toLocaleDateString()}</div>
+        <div class="pBox"><b>目前是「本機帳號」</b>（會員登入在主選單「👤」）：收藏、抽包券、戰績存在這台裝置的瀏覽器裡。換手機或清除瀏覽器資料前，請先複製下面的存檔碼。<br>
+        正式版會改成雲端會員（Google／Apple／Email 登入），換裝置登入就能拿回資料，抽包也會在伺服器端判定、防止竄改。</div>
+        <div class="pBox"><b>匯出存檔碼</b><textarea id="pExp" readonly>${PROFILE.exportCode()}</textarea><button class="btn" id="pCopy" style="margin-top:6px">複製</button></div>
+        <div class="pBox"><b>匯入存檔碼</b>（會取代這台裝置目前的資料）<textarea id="pImp" placeholder="貼上存檔碼"></textarea><button class="btn" id="pImpOk" style="margin-top:6px">匯入</button> <span id="pImpMsg"></span></div>
+        <div class="pBox"><b>測試用</b>：<button class="btn" id="pReset" style="border-color:var(--bad);color:var(--bad)">重置成新玩家</button> <span class="sub">（回到只有起始預組三組、抽包券 ${REWARD.welcome} 張）</span></div>`;
+      $("pNameOk").onclick = () => { const v = $("pName").value.trim().slice(0, 12); if (v) { d.name = v; PROFILE.save(); this.render(); } };
+      $("pName").addEventListener("keydown", e => e.stopPropagation());
+      $("pCopy").onclick = () => { const t = $("pExp"); t.select(); try { navigator.clipboard.writeText(t.value); } catch (e) { document.execCommand && document.execCommand("copy"); } $("pCopy").textContent = "已複製"; };
+      $("pImp").addEventListener("keydown", e => e.stopPropagation());
+      $("pImpOk").onclick = () => { try { PROFILE.importCode($("pImp").value); this.render(); } catch (e) { $("pImpMsg").textContent = "存檔碼不正確"; $("pImpMsg").style.color = "var(--bad)"; } };
+      $("pReset").onclick = () => {
+        if (Date.now() - this.resetArm > 3000) { this.resetArm = Date.now(); $("pReset").textContent = "再按一次確定重置"; return; }
+        PROFILE.reset(); this.resetArm = 0; this.render();
+      };
+    }
+  },
+};
+for (const b of document.querySelectorAll("[data-pt]")) b.onclick = () => { Prof.tab = b.dataset.pt; Prof.render(); };
+$("pBack").onclick = () => Prof.close();
+
+// ------------------------------------------------------------------ 可抽次數（主選單、抽包、商城都看得到）
+function updDraws() {
+  const n = PROFILE.d ? PROFILE.d.tickets : 0;
+  for (const id of ["gDraws", "sDraws"]) { const e = $(id); if (e) e.textContent = `可抽 ${n} 次`; }
+  const m = $("mGacha"); if (m) m.textContent = `🎰 抽包（可抽 ${n} 次）`;
+  const a = $("mAuth"); if (a) a.textContent = AUTH.user ? `👤 ${AUTH.name()}` : "👤 登入／註冊";
+}
+// ------------------------------------------------------------------ 會員（本機帳號版）：之後換成雲端登入時，只要換掉 AUTH 的儲存方式
+const AUTH = {
+  user: (() => { try { return localStorage.getItem("rcb-session") || null; } catch (e) { return null; } })(),
+  all() { try { return JSON.parse(localStorage.getItem("rcb-accounts") || "{}"); } catch (e) { return {}; } },
+  saveAll(o) { try { localStorage.setItem("rcb-accounts", JSON.stringify(o)); } catch (e) {} },
+  name() { const a = this.all()[this.user]; return (a && a.nick) || this.user; },
+  async hash(pw, salt) {
+    const t = salt + "|" + pw;
+    try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
+    catch (e) { let h = 2166136261; for (const c of t) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return "f" + h.toString(16); }
+  },
+  async register(u, pw, nick) {
+    u = (u || "").trim().toLowerCase();
+    if (!/^[a-z0-9_]{3,16}$/.test(u)) throw new Error("帳號請用 3～16 個英文小寫、數字或底線");
+    if ((pw || "").length < 6) throw new Error("密碼至少 6 個字");
+    const all = this.all(); if (all[u]) throw new Error("這個帳號已經有人用了");
+    const salt = Math.floor(gRand() * 1e12).toString(36);
+    all[u] = {salt, hash: await this.hash(pw, salt), nick: (nick || u).trim().slice(0, 12), created: Date.now()};
+    this.saveAll(all);
+    const guest = JSON.parse(JSON.stringify(PROFILE.load()));      // 註冊：把訪客的收藏、抽包券、戰績帶進新帳號
+    try { localStorage.setItem(PROFILE.KEY, JSON.stringify(PROFILE.fresh())); } catch (e) {}   // 訪客那份歸零，避免重複
+    this.user = u; try { localStorage.setItem("rcb-session", u); } catch (e) {}
+    PROFILE.d = guest; PROFILE.d.name = all[u].nick; PROFILE.save(); updDraws();
+  },
+  async login(u, pw) {
+    u = (u || "").trim().toLowerCase(); const a = this.all()[u];
+    if (!a || (await this.hash(pw || "", a.salt)) !== a.hash) throw new Error("帳號或密碼不對");
+    this.setUser(u);
+  },
+  logout() { this.setUser(null); },
+  setUser(u) {
+    this.user = u; try { u ? localStorage.setItem("rcb-session", u) : localStorage.removeItem("rcb-session"); } catch (e) {}
+    PROFILE.d = null; PROFILE.load(); if (u) { const d = PROFILE.d; if (d.name === "玩家") { d.name = this.name(); PROFILE.save(); } }
+    updDraws();
+  },
+};
+const Auth = {
+  mode: "login",
+  open() { $("authOv").hidden = false; this.render(); },
+  close() { $("authOv").hidden = true; },
+  render() {
+    const B = $("authBody");
+    if (AUTH.user) {
+      const a = AUTH.all()[AUTH.user] || {}, d = PROFILE.load();
+      B.innerHTML = `<div class="authCard"><div class="pBox" style="text-align:center"><div style="font-size:42px">👤</div><b style="font-size:20px">${AUTH.name()}</b><br><span class="sub">帳號 ${AUTH.user}｜加入 ${new Date(a.created || Date.now()).toLocaleDateString()}</span></div>
+        <div class="pStat"><div><b>${d.tickets}</b>可抽次數</div><div><b>${PROFILE.count()}</b>收藏</div><div><b>${d.hist.length}</b>對戰紀錄</div><div><b>${(d.orders || []).length}</b>商城訂單</div></div>
+        <button class="btn big" id="aProf">📒 收藏／戰績／存檔碼</button>
+        <button class="btn big" id="aOut" style="border-color:var(--bad);color:var(--bad)">登出</button>
+        <div class="shopNote">目前是測試用的「本機會員」：帳號存在這台裝置的瀏覽器裡，每個帳號有自己的收藏、抽包券、戰績和訂單。正式版會改成雲端會員（Google／Apple／Email 登入），換手機登入資料還在。</div></div>`;
+      $("aOut").onclick = () => { AUTH.logout(); this.mode = "login"; this.render(); };
+      $("aProf").onclick = () => { this.close(); Prof.open("coll"); };
+      return;
+    }
+    const reg = this.mode === "reg";
+    B.innerHTML = `<div class="authCard">
+      <div class="pTabs" style="grid-template-columns:1fr 1fr"><button class="btn" id="aTabL" aria-pressed="${!reg}">登入</button><button class="btn" id="aTabR" aria-pressed="${reg}">註冊新會員</button></div>
+      <input id="aUser" placeholder="帳號（英文小寫、數字、底線）" autocomplete="username" maxlength="16">
+      <input id="aPw" type="password" placeholder="密碼（至少 6 個字）" autocomplete="${reg ? "new-password" : "current-password"}">
+      ${reg ? `<input id="aNick" placeholder="暱稱（遊戲裡顯示的名字）" maxlength="12">` : ""}
+      <div id="authMsg"></div>
+      <button class="btn big primary" id="aGo">${reg ? "註冊並登入" : "登入"}</button>
+      <button class="btn" id="aGuest">先用訪客身分玩</button>
+      <div class="shopNote">${reg ? "註冊後，現在訪客身分的收藏和抽包券會一起帶進新帳號。" : "還沒有帳號？按「註冊新會員」。"}<br>測試版的會員只存在這台裝置；正式版會改成雲端登入。</div></div>`;
+    for (const id of ["aUser", "aPw", "aNick"]) { const e = $(id); if (e) e.addEventListener("keydown", ev => { ev.stopPropagation(); if (ev.key === "Enter") $("aGo").click(); }); }
+    $("aTabL").onclick = () => { this.mode = "login"; this.render(); };
+    $("aTabR").onclick = () => { this.mode = "reg"; this.render(); };
+    $("aGuest").onclick = () => this.close();
+    $("aGo").onclick = async () => {
+      const m = $("authMsg"); m.style.color = "var(--bad)";
+      try { if (reg) await AUTH.register($("aUser").value, $("aPw").value, $("aNick").value); else await AUTH.login($("aUser").value, $("aPw").value); m.textContent = ""; this.render(); }
+      catch (e) { m.textContent = e.message; }
+    };
+  },
+};
+// ------------------------------------------------------------------ 線上商城（測試版不收費：按下就直接拿到）
+const SHOP = [
+  {id: "daily", cat: "每日", ic: "🎁", name: "每日登入禮", ds: "每天可以領一次", t: 1, price: 0, daily: true},
+  {id: "t1", cat: "抽包券", ic: "🎫", name: "抽包券 ×1", ds: "轉一次扭蛋機", t: 1, price: 30},
+  {id: "t5", cat: "抽包券", ic: "🎫", name: "抽包券 ×5", ds: "5 連抽一次", t: 5, price: 140},
+  {id: "t11", cat: "抽包券", ic: "🎟️", name: "抽包券 ×11", ds: "買 10 送 1", t: 11, price: 290, tag: "多送 1 張"},
+  {id: "t30", cat: "抽包券", ic: "💎", name: "抽包券 ×30", ds: "大量包，最划算", t: 30, price: 750, tag: "最划算"},
+  {id: "newbie", cat: "禮包", ic: "🌟", name: "新手禮包", ds: "抽包券 ×10，每個帳號限買一次", t: 10, price: 99, once: true, tag: "限購 1 次"},
+  {id: "monthly", cat: "禮包", ic: "📅", name: "月卡", ds: "立刻拿 ×5，之後 30 天每天登入再送 ×1", t: 5, price: 150, month: true},
+];
+const Shop = {
+  open() { PROFILE.load(); $("shopOv").hidden = false; this.render(); updDraws(); },
+  close() { $("shopOv").hidden = true; if (!$("gachaOv").hidden) Gacha.updTix(); },
+  today() { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; },
+  render() {
+    const d = PROFILE.load(); d.orders = d.orders || []; d.shop = d.shop || {};
+    const cats = [...new Set(SHOP.map(x => x.cat))];
+    const stateOf = it => it.daily ? (d.shop.daily === this.today() ? "今天已領" : "") : it.once ? (d.shop[it.id] ? "已購買" : "") : "";
+    $("shopBody").innerHTML = `<div class="shopNote">${AUTH.user ? `會員 <b>${AUTH.name()}</b>｜` : `訪客（<a href="#" id="sLogin" style="color:var(--volt)">登入／註冊</a> 才能保存訂單）｜`}<b style="color:var(--volt)">測試版：不會真的收費</b>，按「購買」直接拿到。正式版會接金流（信用卡／Apple Pay／Google Pay／超商代碼）。</div>`
+      + cats.map(c => `<p class="menuLbl" style="margin:10px 0 6px">${c}</p><div class="shopGrid">${SHOP.filter(x => x.cat === c).map(it => { const st = stateOf(it);
+        return `<div class="shopIt">${it.tag ? `<span class="tag">${it.tag}</span>` : ""}<div class="ic">${it.ic}</div><b>${it.name}</b><div class="ds">${it.ds}</div><div class="pr">${it.price ? "NT$" + it.price : "免費"}</div>
+        <button class="btn primary" data-buy="${it.id}" ${st ? "disabled" : ""}>${st || (it.price ? "購買" : "領取")}</button></div>`; }).join("")}</div>`).join("")
+      + `<p class="menuLbl" style="margin:14px 0 6px">我的訂單</p>${d.orders.length ? `<table class="pHist">${d.orders.slice(0, 20).map(o => { const t = new Date(o.t); return `<tr><td style="color:var(--dim);white-space:nowrap">${t.getMonth() + 1}/${t.getDate()} ${String(t.getHours()).padStart(2, "0")}:${String(t.getMinutes()).padStart(2, "0")}</td><td>${o.name}</td><td style="color:var(--volt)">🎫+${o.t}</td><td style="color:var(--dim)">${o.price ? "NT$" + o.price + "（測試）" : "免費"}</td></tr>`; }).join("")}</table>` : `<p class="sub">還沒有訂單。</p>`}`;
+    const lg = $("sLogin"); if (lg) lg.onclick = e => { e.preventDefault(); Auth.open(); };
+    for (const b of document.querySelectorAll("[data-buy]")) b.onclick = () => this.buy(b.dataset.buy);
+  },
+  buy(id) {
+    const it = SHOP.find(x => x.id === id), d = PROFILE.load(); d.orders = d.orders || []; d.shop = d.shop || {};
+    if (it.daily) { if (d.shop.daily === this.today()) return; d.shop.daily = this.today(); }
+    if (it.once) { if (d.shop[it.id]) return; d.shop[it.id] = Date.now(); }
+    if (it.month) d.shop.monthUntil = Date.now() + 30 * 864e5;
+    d.tickets += it.t; d.orders.unshift({t: Date.now(), id, name: it.name, t: it.t, price: it.price}); d.orders.length = Math.min(d.orders.length, 100);
+    PROFILE.save(); GS.up(); Haptic.buzz(20);
+    this.render(); this.toast(`${it.name} 到手！可抽 ${d.tickets} 次`);
+  },
+  // 月卡：每天第一次打開時送 1 張
+  monthTick() {
+    const d = PROFILE.load(); d.shop = d.shop || {};
+    if (d.shop.monthUntil > Date.now() && d.shop.monthDay !== this.today()) { d.shop.monthDay = this.today(); d.tickets += 1; PROFILE.save(); }
+  },
+  toast(t) { let e = $("shopToast"); if (!e) { e = document.createElement("div"); e.id = "shopToast"; $("shopOv").appendChild(e); } e.textContent = t; e.hidden = false; clearTimeout(this._t); this._t = setTimeout(() => e.hidden = true, 1800); },
+};
+$("mShop").onclick = () => Shop.open();
+$("gShop").onclick = () => Shop.open();
+$("sBack").onclick = () => Shop.close();
+$("mAuth").onclick = () => Auth.open();
+$("aBack").onclick = () => Auth.close();
+$("mGacha").onclick = () => Gacha.open();
+$("mProf").onclick = () => Prof.open("coll");
+if (FEATURES.collection) { $("mColRow").hidden = false; $("mColRow2").hidden = false; PROFILE.load(); Shop.monthTick(); updDraws(); }
+
 $("fbgPick").onclick = () => $("fbgFile").click();
 $("fbgFile").onchange = async e => { const f = e.target.files && e.target.files[0]; e.target.value = ""; if (f && !(await setCustomField(f))) $("fbgNote").textContent = "這個檔案讀不出圖片，請換一張 JPG／PNG。"; };
 $("fbgReset").onclick = () => { FBG.mode = "default"; try { localStorage.setItem("rcb-fbg", "default"); } catch (e) {} refreshField(); };
 $("tGuide").onclick = () => { FBG.guide = !FBG.guide; try { localStorage.setItem("rcb-guide", FBG.guide ? "on" : "off"); } catch (e) {} refreshField(); };
-window.__RCB = {FBG, fieldCanvas, setCustomField, refreshField, FX, FIELD, setField, Menu, AimBar, actor, locked, setRule, teamMax, matchTime, setNoOut, PIP, CPU, Relay, CTRL, Tut, Watch, Report, Haptic, SFX, predictPath, accErr, perfZone, G, P, RULES, physics, collide, railBounce, startResolve, applyResults, afterResults, startBattle, beginTurn, update, placeValid, place, confirmSelect, confirmAim, lockPower, lockAcc, newPlayer, PRESETS, BY_ID, COINS, R, UI, GFX, pval, skipDuel};
+window.__RCB = {Shop, AUTH, Auth, SHOP, FBG, fieldCanvas, setCustomField, refreshField, Gacha, PROFILE, Prof, GPOOLS, poolRates, drawOne, FEATURES, STARTER, REWARD, FX, FIELD, setField, Menu, AimBar, actor, locked, setRule, teamMax, matchTime, setNoOut, PIP, CPU, Relay, CTRL, Tut, Watch, Report, Haptic, SFX, predictPath, accErr, perfZone, G, P, RULES, physics, collide, railBounce, startResolve, applyResults, afterResults, startBattle, beginTurn, update, placeValid, place, confirmSelect, confirmAim, lockPower, lockAcc, newPlayer, PRESETS, BY_ID, COINS, R, UI, GFX, pval, skipDuel};
 Object.defineProperties(window.__RCB, {W: {get: () => W, enumerable: true}, H: {get: () => H, enumerable: true}, START_X: {get: () => START_X}, START_Y: {get: () => START_Y}});   // 場地大小可換：用即時值
 </script>
 
