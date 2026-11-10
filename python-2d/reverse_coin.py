@@ -383,20 +383,20 @@ def field_art():
 
 
 def jump_plan(flipped):
-    """彈起翻轉計畫：主要一跳 5～7 圈；約 15% 落地後再小彈一次、慢慢翻半圈。總半圈數的奇偶＝最後正反面。"""
+    """彈起翻轉計畫：主要一跳約 4.5～6.5 圈；約 15% 落地後再小彈一次、慢慢翻半圈。總半圈數的奇偶＝最後正反面。"""
     bounce = random.random() < 0.15
-    half = 10 + random.randrange(5)
+    half = 9 + random.randrange(5)                 # 約 4.5～6.5 圈（比之前慢 10%）
     if (half + (1 if bounce else 0)) % 2 != (1 if flipped else 0):
         half += 1
-    return {"bounce": bounce, "half": half, "tm": 0.58 if bounce else 1.0, "peak": 0.85 + 0.3 * random.random()}
+    return {"bounce": bounce, "half": half, "tm": 0.58 if bounce else 1.0, "peak": 1.3 * (0.85 + 0.3 * random.random())}   # 彈起高度 +30%
 
 
 def jump_pose(J, t):
-    """回傳（高度 0～1, 翻轉角度）：上升減速、落地加速；二次彈跳時慢慢翻半圈。"""
+    """回傳（高度, 翻轉角度）：往上越飛越快、落地越來越慢；二次彈跳時慢慢翻半圈。"""
     t = max(0.0, min(1.0, t))
     if t <= J["tm"]:
-        u, up = t / J["tm"], 0.42
-        h = 1 - (1 - u / up) ** 2 if u < up else 1 - ((u - up) / (1 - up)) ** 2
+        u, up = t / J["tm"], 0.5
+        h = (u / up) ** 2 if u < up else (1 - (u - up) / (1 - up)) ** 2
         return h * J["peak"], J["half"] * math.pi * (1 - (1 - u) ** 1.35)
     w = (t - J["tm"]) / (1 - J["tm"])
     e = 2 * w * w if w < 0.5 else 1 - (-2 * w + 2) ** 2 / 2
